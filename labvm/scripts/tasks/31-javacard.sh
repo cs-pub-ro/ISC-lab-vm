@@ -22,8 +22,8 @@ function _user_script() {
 	[[ -d "$HOME/IsoApplet" ]] || git clone -b main-javacard-v2.2.2 https://github.com/philipWendland/IsoApplet.git "$HOME/IsoApplet"
 	(
 		cd "$HOME/IsoApplet"; git submodule init && git submodule update;
-		ant
-		javac -classpath jcardsim/target/jcardsim-3.0.5-SNAPSHOT.jar IsoApplet/src/xyz/wendland/javacard/pki/isoapplet/*.java;
+		# ant
+		javac -classpath "$HOME/jcardsim/target/jcardsim-3.0.5-SNAPSHOT.jar" "$HOME/IsoApplet/src/xyz/wendland/javacard/pki/isoapplet/"*.java
 	)
 
 	[[ -d "$HOME/vsmartcard" ]] || git clone https://github.com/frankmorgner/vsmartcard.git "$HOME/vsmartcard"
