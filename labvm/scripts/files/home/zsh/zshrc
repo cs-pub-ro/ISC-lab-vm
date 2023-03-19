@@ -7,6 +7,7 @@ source ~/.config/zsh/zpm/zpm.zsh 2>/dev/null || {
 }
 
 ### Tmux
+TMUX_AUTOSTART=false  # too many enemies, offfff :(
 zpm if ssh load zpm-zsh/tmux
 zpm if-not ssh load zpm-zsh/tmux,apply:path
 
