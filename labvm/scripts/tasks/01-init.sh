@@ -8,7 +8,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # uncomment to skip costly installation steps
 SKIP_SGX_SDK=1
-SKIP_INSTALL_JAVACARD_SIM=1
+#SKIP_INSTALL_JAVACARD_SIM=1
 
 # update the repos
 apt-get update
