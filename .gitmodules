@@ -1,0 +1,3 @@
+[submodule "labvm-framework"]
+	path = framework
+	url = git@github.com:cs-pub-ro/labvm-framework.git
