@@ -1,7 +1,7 @@
 # ISC Lab virtual machine source code
 
 This repository contains the ISC Lab VM generation scripts, based on 
-[https://github.com/cs-pub-ro/labvm-framework|LabVM Framework]
+[LabVM Framework](https://github.com/cs-pub-ro/labvm-framework)
 (automated using `qemu` and Packer).
 
 Requirements:
@@ -16,7 +16,8 @@ Download and save a [Ubuntu 22.04 Live Server
 install](http://cdimage.ubuntu.com/releases/22.04.1/release/) iso image.
 
 Optionally, create `config.local.mk`, copy the variables from
-[`framework/config.default.mk`](https://github.com/cs-pub-ro/labvm-framework/blob/master/config.default.mk) and edit them to your liking.
+[`framework/config.default.mk`](https://github.com/cs-pub-ro/labvm-framework/blob/master/config.default.mk)
+and edit them to your liking.
 
 You might also want to ensure that packer and qemu are properly installed and
 configured.
