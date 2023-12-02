@@ -13,3 +13,6 @@ if ! grep "^$GAI_PREFER_IPV4" "$gai_file"; then
 	echo "$GAI_PREFER_IPV4" >> "$gai_file"
 fi
 
+# disable password authentication (enabled by cloud-init :/ )
+rm -f /etc/ssh/sshd_config.d/50-cloud-init.conf
+
