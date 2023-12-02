@@ -5,7 +5,7 @@
 # terminal / networking / utilities
 apt-get install --no-install-recommends -y tree tmux vim nano \
 	bash-completion traceroute tcpdump dsniff rsync whois elinks \
-	s-nail mailutils sharutils telnet dnsutils ftp nmap  \
+	s-nail mailutils sharutils telnet dnsutils ftp nmap iputils-ping  \
 	iptables-persistent asciinema
 
 # Build tools, python, libraries

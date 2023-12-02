@@ -21,6 +21,14 @@ apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin do
 # docker without sudo
 usermod -aG docker student || true
 
+# MTU fix for OpenStack VMs
+cat << EOF > /etc/docker/daemon.json
+{
+  "mtu": 1450,
+  "features": {"buildkit": true}
+}
+EOF
+
 # enable docker by default
 systemctl restart docker
 systemctl enable docker
