@@ -9,8 +9,16 @@ apt-get install --no-install-recommends -y tree tmux vim nano \
 	iptables-persistent asciinema
 
 # Build tools, python, libraries
-apt-get install --no-install-recommends -y build-essential libc6-dev-i386 gdb python3 \
-	python3-pip libssl-dev libffi-dev
+apt-get install --no-install-recommends -y build-essential libc6-dev-i386 gdb gdbserver \
+	python3 python3-venv python3-pip python3-setuptools libssl-dev libffi-dev \
+	gcc-multilib libglib2.0-dev libc6-dbg
+
+# Add i386 libraries (for pwndbg)
+if uname -m | grep x86_64 >/dev/null; then
+	dpkg --add-architecture i386
+	apt-get update
+	apt-get install -y libc6-dbg:i386 libgcc-s1:i386
+fi
 
 # H4x0r tools
 apt-get install --no-install-recommends -y john netcat-openbsd  \
