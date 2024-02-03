@@ -16,7 +16,7 @@ Download and save a [Ubuntu 22.04 Live Server
 install](http://cdimage.ubuntu.com/releases/22.04.1/release/) iso image.
 
 Optionally, create `config.local.mk`, copy the variables from
-[`framework/config.default.mk`](https://github.com/cs-pub-ro/labvm-framework/blob/master/config.default.mk)
+[`config.sample.mk`](https://github.com/cs-pub-ro/ISC-lab-vm/blob/master/config.sample.mk) and/or [`framework/config.default.mk`](https://github.com/cs-pub-ro/labvm-framework/blob/master/config.default.mk)
 and edit them to your liking.
 
 You might also want to ensure that packer and qemu are properly installed and
