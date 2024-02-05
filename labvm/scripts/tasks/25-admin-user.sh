@@ -11,4 +11,6 @@ usermod -aG "docker,sudo" admin
 echo 'admin ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/admin
 # Note: this will be changed in private VMs, won't bring you any flag :P
 echo "admin:admin1337" | chpasswd
+# hahah, okaaaay, here, take it:
+OSINT_FLAG='ISC{n0_p455w0rdz_0n_g!t_p1z}'
 
