@@ -6,7 +6,7 @@
 apt-get install --no-install-recommends -y tree tmux vim nano \
 	bash-completion traceroute tcpdump dsniff rsync whois elinks \
 	s-nail mailutils sharutils telnet dnsutils ftp nmap iputils-ping  \
-	iptables-persistent asciinema exiftool
+	iptables-persistent asciinema exiftool nikto
 
 # Build tools, python, libraries
 apt-get install --no-install-recommends -y build-essential libc6-dev-i386 gdb gdbserver \
