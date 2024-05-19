@@ -29,3 +29,11 @@ add-apt-repository -y ppa:neovim-ppa/unstable
 apt-get -y update
 apt-get -y install neovim
 
+GOBUSTER_DEST=/tmp/gobuster.tar.gz
+curl --fail --show-error --silent -L -o "$GOBUSTER_DEST" \
+	"https://github.com/OJ/gobuster/releases/download/v3.6.0/gobuster_Linux_x86_64.tar.gz"
+mkdir /tmp/gobuster/
+tar xf "$GOBUSTER_DEST" -C "/tmp/gobuster"
+cp -f "/tmp/gobuster/gobuster" /usr/local/bin/gobuster
+chmod +x /usr/local/bin/gobuster
+
