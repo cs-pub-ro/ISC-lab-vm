@@ -8,12 +8,13 @@ packer {
 }
 
 variables {
-  vm_name = "isc-lab-vm"
+  vm_name = "labvm"
   vm_pause = 0
   vm_debug = 0
   vm_noinstall = 0
   qemu_unmap = false
   qemu_ssh_forward = 20022
+  disk_size = 8192
   source_image = "./path/to/ubuntu-22-base.qcow2"
   source_checksum = "none"
   use_backing_file = true
@@ -22,7 +23,16 @@ variables {
   ssh_password = "student"
 }
 
-source "qemu" "isc-lab-vm" {
+locals {
+  envs = [
+    "VM_DEBUG=${var.vm_debug}",
+    "VM_NOINSTALL=${var.vm_noinstall}",
+    "INSTALL_DIR=/home/student/install"
+  ]
+  sudo = "{{.Vars}} sudo -E -S bash -e '{{.Path}}'"
+}
+
+source "qemu" "labvm" {
   // VM Info:
   vm_name       = var.vm_name
   headless      = false
@@ -30,7 +40,7 @@ source "qemu" "isc-lab-vm" {
   // Virtual Hardware Specs
   memory         = 2048
   cpus           = 2
-  disk_size      = 8000
+  disk_size      = var.disk_size
   disk_interface = "virtio"
   net_device     = "virtio-net"
   // disk usage optimizations (unmap zeroes as free space)
@@ -55,18 +65,17 @@ source "qemu" "isc-lab-vm" {
 }
 
 build {
-  sources = ["sources.qemu.isc-lab-vm"]
+  sources = ["sources.qemu.labvm"]
 
   provisioner "shell" {
     inline = [
-      "mkdir -p /home/student/install",
-      "chown student:student /home/student/install -R"
+      "rm -rf $INSTALL_DIR && mkdir -p $INSTALL_DIR",
+      "chown student:student $INSTALL_DIR -R"
     ]
-    execute_command = "{{.Vars}} sudo -E -S bash -e '{{.Path}}'"
-    environment_vars = [
-      "VM_DEBUG=${var.vm_debug}"
-    ]
+    execute_command = local.sudo
+    environment_vars = local.envs
   }
+
   provisioner "file" {
     source = "scripts/"
     destination = "/home/student/install"
@@ -74,27 +83,19 @@ build {
 
   provisioner "shell" {
     inline = [
-      "chmod +x /home/student/install/install-base.sh",
-      "/home/student/install/install-base.sh"
+      "[ ! -f $INSTALL_DIR/install-base.sh ] || bash $INSTALL_DIR/install-base.sh"
     ]
     expect_disconnect = true
-    execute_command = "{{.Vars}} sudo -E -S bash -e '{{.Path}}'"
-    environment_vars = [
-      "VM_DEBUG=${var.vm_debug}",
-      "VM_NOINSTALL=${var.vm_noinstall}"
-    ]
+    execute_command = local.sudo
+    environment_vars = local.envs
   }
 
   provisioner "shell" {
     inline = [
-      "chmod +x /home/student/install/install.sh",
-      "/home/student/install/install.sh"
+      "chmod +x $INSTALL_DIR/install.sh && $INSTALL_DIR/install.sh"
     ]
-    execute_command = "{{.Vars}} sudo -E -S bash -e '{{.Path}}'"
-    environment_vars = [
-      "VM_DEBUG=${var.vm_debug}",
-      "VM_NOINSTALL=${var.vm_noinstall}"
-    ]
+    execute_command = local.sudo
+    environment_vars = local.envs
   }
 
   provisioner "breakpoint" {
