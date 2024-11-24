@@ -19,6 +19,7 @@ basevm-src-image = $(BASE_VM_INSTALL_ISO)
 labvm-ver = $(ISC_LABVM_VERSION)
 labvm-name = ISC_$(labvm-ver)
 labvm-packer-src = ./labvm
+labvm-packer-args = -var "isc_authorized_keys=$(ISC_AUTHORIZED_KEYS)"
 labvm-src-from = basevm
 define labvm-extra-rules=
 .PHONY: labvm_compact labvm_zerofree
@@ -30,6 +31,7 @@ endef
 # Cloud-init image (based on examplevm!, see src-image)
 cloudvm-name = ISC_$(labvm-ver)_cloud
 cloudvm-packer-src = $(FRAMEWORK_DIR)/cloudvm
+cloudvm-packer-args = -var "vm_password=$(ISC_CLOUD_VM_PASSWORD)"
 cloudvm-src-from = labvm
 define cloudvm-extra-rules=
 .PHONY: cloudvm_compact cloudvm_zerofree

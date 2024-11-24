@@ -1,7 +1,7 @@
 packer {
   required_plugins {
     qemu = {
-      version = ">= 1.0.6"
+      version = ">= 1.0.10"
       source  = "github.com/hashicorp/qemu"
     }
   }
@@ -12,6 +12,7 @@ variables {
   vm_pause = 0
   vm_debug = 0
   vm_noinstall = 0
+  isc_authorized_keys = ""
   qemu_unmap = false
   qemu_ssh_forward = 20022
   disk_size = 8192
@@ -24,10 +25,12 @@ variables {
 }
 
 locals {
+  install_dir = "/home/student/install"
   envs = [
     "VM_DEBUG=${var.vm_debug}",
     "VM_NOINSTALL=${var.vm_noinstall}",
-    "INSTALL_DIR=/home/student/install"
+    "INSTALL_DIR=${local.install_dir}",
+    "ISC_AUTHORIZED_KEYS=${basename(var.isc_authorized_keys)}",
   ]
   sudo = "{{.Vars}} sudo -E -S bash -e '{{.Path}}'"
 }
@@ -77,8 +80,11 @@ build {
   }
 
   provisioner "file" {
-    source = "scripts/"
-    destination = "/home/student/install"
+    sources = concat(
+      ["scripts/"],
+      (var.isc_authorized_keys == "" ? [] : ["${var.isc_authorized_keys}"]),
+    )
+    destination = "${local.install_dir}/"
   }
 
   provisioner "shell" {
@@ -103,5 +109,4 @@ build {
     note    = "this is a breakpoint"
   }
 }
-
 
