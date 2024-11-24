@@ -1,14 +1,14 @@
 #!/bin/bash
 # Intel SGX SDK install script
 
+[[ -z "$SKIP_INSTALL_JAVACARD_SIM" ]] || return 0
+
 apt-get -y install pcscd pcsc-tools \
 	libp11-3 opensc-pkcs11 libengine-pkcs11-openssl opensc \
 	libglib2.0-dev libnss3-dev libtool make autoconf autoconf-archive automake \
 	libsofthsm2-dev softhsm2 softhsm2-common help2man libcmocka-dev libusb-dev \
 	libudev-dev flex libnss3-tools nghttp2 libnghttp2-dev libssl-dev libpcsclite1 pkg-config \
 	libpcsclite-dev openjdk-8-jre-headless openjdk-8-jdk-headless maven ant
-
-[[ -z "$SKIP_INSTALL_JAVACARD_SIM" ]] || return 0
 
 if [[ "$DEBUG" -gt 1 ]]; then
 	(
