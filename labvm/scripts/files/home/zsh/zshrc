@@ -1,10 +1,11 @@
 #!/usr/bin/env zsh
 
 # install Zsh Plugin Manager
-source ~/.config/zsh/zpm/zpm.zsh 2>/dev/null || {
-  git clone https://github.com/zpm-zsh/zpm ~/.config/zsh/zpm
-  source ~/.config/zsh/zpm
-}
+ZPM_ROOT="$HOME/.config/zsh/zpm"
+if [[ ! -f "$ZPM_ROOT/zpm.zsh" ]]; then
+  git clone --recursive https://github.com/zpm-zsh/zpm "$ZPM_ROOT"
+fi
+source "$ZPM_ROOT/zpm.zsh"
 
 ### Tmux
 export TMUX_AUTOSTART=false
@@ -15,8 +16,9 @@ export TMUX_AUTOSTART=false
 zpm if vte load zpm-zsh/vte
 
 ## Spaceship theme
-export SPACESHIP_ROOT="~/.config/zsh/spaceship"
+export SPACESHIP_ROOT="$HOME/.config/zsh/spaceship"
 if [[ ! -f "$SPACESHIP_ROOT/spaceship.zsh" ]]; then
+  mkdir -p "$SPACESHIP_ROOT"
 	git clone --depth=1 "https://github.com/spaceship-prompt/spaceship-prompt.git" "$SPACESHIP_ROOT"
 fi
 source "$SPACESHIP_ROOT/spaceship.zsh"
