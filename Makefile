@@ -3,48 +3,45 @@
 
 FRAMEWORK_DIR ?= ./framework
 include $(FRAMEWORK_DIR)/framework.mk
+include $(FRAMEWORK_DIR)/lib/inc_all.mk
 
 # set default goals
 DEFAULT_GOAL = labvm
 INIT_GOAL = labvm
-SUDO = sudo
+SUDO ?= sudo
 
 # Fresh Ubuntu Server base VM
-ubuntu-ver = 22
-basevm-name = ubuntu_$(ubuntu-ver)_base
-basevm-packer-src = $(FRAMEWORK_DIR)/basevm
-basevm-src-image = $(BASE_VM_INSTALL_ISO)
+$(call vm_new_base_ubuntu,base)
+base-ver = 22
 
-# VM with lab-specific customizations
 labvm-ver = $(ISC_LABVM_VERSION)
-labvm-name = ISC_$(labvm-ver)
-labvm-packer-src = ./labvm
-labvm-packer-args = -var "isc_authorized_keys=$(ISC_AUTHORIZED_KEYS)"
-labvm-src-from = basevm
-define labvm-extra-rules=
-.PHONY: labvm_compact labvm_zerofree
-labvm_zerofree: labvm_compact
-labvm_compact:
-	$(SUDO) "$(FRAMEWORK_DIR)/utils/zerofree.sh" "$$(labvm-dest-image)"
-endef
+labvm-prefix = ISC_$(labvm-ver)
 
-# Cloud-init image (based on examplevm!, see src-image)
-cloudvm-name = ISC_$(labvm-ver)_cloud
-cloudvm-packer-src = $(FRAMEWORK_DIR)/cloudvm
-cloudvm-packer-args = -var "vm_password=$(ISC_CLOUD_VM_PASSWORD)"
-cloudvm-src-from = labvm
-define cloudvm-extra-rules=
-.PHONY: cloudvm_compact cloudvm_zerofree
-cloudvm_zerofree: cloudvm_compact
-cloudvm_compact:
-	$(SUDO) "$(FRAMEWORK_DIR)/utils/zerofree.sh" "$$(cloudvm-dest-image)"
-	qemu-img convert -O qcow2 "$$(cloudvm-dest-image)" "$$(cloudvm-dest-image).compact.qcow2"
-	ls -lh "$$(cloudvm-dest-image)"
-endef
+# VM with ISC lab customizations
+$(call vm_new_layer_full_featured,labvm)
+labvm-name = $(labvm-prefix)
+labvm-src-from = base
+labvm-script-prepare = isc-prepare.sh
+labvm-copy-scripts += $(abspath ./labvm/scripts)/
+labvm-extra-rules += $(vm_zerofree_rule)
+
+# Export to VirtualBox & VMware
+localvm-name = $(labvm-prefix)_Local
+localvm-type = vm-combo
+localvm-vmname = ISC $(labvm-ver) VM
+localvm-src-from = labvm
+localvm-extra-rules += $(vm_zerofree_rule)
+
+# Cloud-init image
+$(call vm_new_layer_cloud,cloud)
+cloud-name = $(labvm-prefix)_cloud
+cloud-src-from = labvm
+cloud-copy-scripts += $(abspath ./cloud/scripts)/
+cloud-extra-envs = "ISC_CLOUD_ADMIN_PASSWORD=$(ISC_CLOUD_ADMIN_PASSWORD)",
+cloud-extra-rules += $(vm_zerofree_rule)
 
 # list with all VMs to generate rules for (note: use dependency ordering!)
-build-vms += basevm labvm cloudvm
+build-vms = base labvm localvm cloud
 
-$(call eval_common_rules)
-$(call eval_all_vm_rules)
+$(call vm_eval_all_rules)
 

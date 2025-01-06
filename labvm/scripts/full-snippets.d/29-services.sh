@@ -1,6 +1,8 @@
 #!/bin/bash
+[[ -n "$__INSIDE_VM_RUNNER" ]] || { echo "Only call within VM runner!" >&2; return 1; }
 # VM Services install / configuration script
-[[ "$INSIDE_INSTALL_SCRIPT" == "1" ]] || { echo "Direct calls not supported!">&2; exit 5; }
+
+sh_log_info "Installing & configuring services..."
 
 # Use Systemd presets to disable services by default
 SYSTEMD_PRESET_FILE=/etc/systemd/system-preset/90-default-servers.preset
@@ -8,7 +10,6 @@ mkdir -p /etc/systemd/system-preset/
 
 # network services: telnetd, vsftpd
 apt-get install --no-install-recommends -y telnetd vsftpd
-# TODO: configs?
 
 # apache2
 apt-get install --no-install-recommends -y apache2 libapache2-mod-php
@@ -19,6 +20,10 @@ echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-sel
 apt-get install --no-install-recommends -y postfix courier-imap
 # configure mail
 postconf -e 'home_mailbox= Maildir/'
+postconf -e 'smtp_host_lookup = native,dns'
+postconf -e 'mynetworks = 127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 [::ffff:127.0.0.0]/104 [::1]/128'
+postconf -e "myhostname = isc-vm"
+
 # use maildir for reading mail
 if ! grep "^export MAIL=" /etc/bash.bashrc; then
 	echo 'export MAIL=~/Maildir' >> /etc/bash.bashrc
@@ -31,7 +36,9 @@ fi
 # DHCP servers
 echo "disable dnsmasq.service" > "$SYSTEMD_PRESET_FILE"
 echo "disable isc-dhcp-server.service" > "$SYSTEMD_PRESET_FILE"
+echo "disable isc-dhcp-server6.service" >> "$SYSTEMD_PRESET_FILE"
 apt-get install --no-install-recommends -y isc-dhcp-server dnsmasq
 systemctl disable dnsmasq
 systemctl disable isc-dhcp-server
+systemctl disable isc-dhcp-server6.service
 

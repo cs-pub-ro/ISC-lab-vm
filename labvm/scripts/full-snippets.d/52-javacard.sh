@@ -1,4 +1,5 @@
 #!/bin/bash
+[[ -n "$__INSIDE_VM_RUNNER" ]] || { echo "Only call within VM runner!" >&2; return 1; }
 # Intel SGX SDK install script
 
 [[ -z "$SKIP_INSTALL_JAVACARD_SIM" ]] || return 0
