@@ -31,9 +31,9 @@ function _install_home_config() {
 	cp -f "$HOME/.config/lunarvim.install/config.lua" "$HOME/.config/lvim/config.lua"
 
 	# pwndbg!
-	[[ -d "$HOME/pwndbg" ]] || git clone https://github.com/pwndbg/pwndbg "$HOME/pwndbg"
+	[[ -d "$HOME/.pwndbg" ]] || git clone https://github.com/pwndbg/pwndbg "$HOME/.pwndbg"
 	(
-		cd "$HOME/pwndbg";
+		cd "$HOME/.pwndbg";
 		PWNDBG_VENV_PATH=./.venv
 		# create Python virtual environment and install dependencies in it
 		[[ -d "${PWNDBG_VENV_PATH}" ]] || python3 -m venv -- ${PWNDBG_VENV_PATH}
