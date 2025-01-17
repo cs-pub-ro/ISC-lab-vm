@@ -23,6 +23,10 @@ if [[ ! -f "$SPACESHIP_ROOT/spaceship.zsh" ]]; then
 fi
 source "$SPACESHIP_ROOT/spaceship.zsh"
 
+# comon key binds
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+
 ### 3party plugins
 zpm load                      \
   zpm-zsh/core-config         \
