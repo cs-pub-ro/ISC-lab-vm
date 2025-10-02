@@ -39,8 +39,8 @@ function _install_home_config() {
 		[[ -d "${PWNDBG_VENV_PATH}" ]] || python3 -m venv -- ${PWNDBG_VENV_PATH}
 		PYTHON=${PWNDBG_VENV_PATH}/bin/python
 		# upgrade pip itself
-		${PYTHON} -m pip install --upgrade pip
-		${PWNDBG_VENV_PATH}/bin/pip install -e .
+		${PYTHON} -m pip install --upgrade pip uv
+		${PWNDBG_VENV_PATH}/bin/uv sync --extra gdb --quiet
 		echo "source $PWD/gdbinit.py" > "$HOME/.gdbinit"
 	)
 }
