@@ -10,9 +10,9 @@ DEFAULT_GOAL = labvm
 INIT_GOAL = labvm
 SUDO ?= sudo
 
-# Fresh Ubuntu Server base VM
-$(call vm_new_base_ubuntu,base)
-base-ver = 22
+# Fresh Debian base VM
+$(call vm_new_base_debian,base)
+base-ver = 13
 
 labvm-ver = $(ISC_LABVM_VERSION)
 labvm-prefix = ISC_$(labvm-ver)
