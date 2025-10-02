@@ -2,10 +2,10 @@
 # also check out framework/config.default.mk for all variables.
 
 # Lab VM edition
-ISC_LABVM_VERSION = 2024
+ISC_LABVM_VERSION = 2025
 
-# Base OS installation .iso image
-BASE_VM_INSTALL_ISO ?= $(HOME)/Downloads/ubuntu-22.04.3-live-server-amd64.iso
+# Base .iso images dir
+BASE_ISO_DIR ?= $(HOME)/Downloads/iso
 
 # E.g., move build output (VM destination) directory to an external drive
 #BUILD_DIR ?= /media/myssd/tmp/packer
