@@ -5,30 +5,8 @@
 # this will be ran as the `student` / `root` users
 function _install_home_config() {
 	set -e
-	# bashrc:
-	mkdir -p "$HOME/.config"
-	install -m755 "$ISC_SRC/files/home/bashrc" "$HOME/.bashrc"
-
-	# tmux config (for user, only):
-	if [[ "$USER" != "root" ]]; then
-		mkdir -p "$HOME/.config/tmux"
-		rsync -ai "$ISC_SRC/files/home/tmux/" "$HOME/.config/tmux/"
-		ln -sf "$HOME/.config/tmux/tmux.conf" "$HOME/.tmux.conf"
-	fi
-
-	# zsh config:
-	mkdir -p "$HOME/.config/zsh/"
-	rsync -ai "$ISC_SRC/files/home/zsh/" "$HOME/.config/zsh/"
-	ln -sf "$HOME/.config/zsh/zshrc" "$HOME/.zshrc"
-	sudo chsh -s /usr/bin/zsh "$USER"
-	# run zsh for user to install plugins
-	zsh -i -c 'source ~/.zshrc; exit 0'
-
-	# install lunarvim
-	mkdir -p "$HOME/.config/lvim"
-	rsync -ai "$ISC_SRC/files/home/lunarvim/" "$HOME/.config/lunarvim.install/"
-	bash "$HOME/.config/lunarvim.install/install.sh"
-	cp -f "$HOME/.config/lunarvim.install/config.lua" "$HOME/.config/lvim/config.lua"
+	# install labvm-dotfiles:
+	"$ISC_SRC/files/labvm-dotfiles/install.sh"
 
 	# pwndbg!
 	[[ -d "$HOME/.pwndbg" ]] || git clone https://github.com/pwndbg/pwndbg "$HOME/.pwndbg"
