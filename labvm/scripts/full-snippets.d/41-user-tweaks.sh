@@ -24,6 +24,8 @@ function _install_home_config() {
 }
 
 _exported_script="$(declare -p ISC_SRC); $(declare -f _install_home_config)"
-echo "$_exported_script; _install_home_config" | su -c bash student
-echo "$_exported_script; _install_home_config" | su -c bash root
+for usr in student root; do
+	chsh -s /usr/bin/zsh "$usr"
+	echo "$_exported_script; _install_home_config" | su -c bash "usr"
+done
 
