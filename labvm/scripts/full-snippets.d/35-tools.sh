@@ -35,6 +35,9 @@ rm -rf "$NEOVIM_DEST" && mkdir -p "$NEOVIM_DEST"
 tar xf /tmp/nvim-linux.tar.gz --strip-components=1 -C "$NEOVIM_DEST"
 ln -sf "$NEOVIM_DEST/bin/nvim" "/usr/local/bin/nvim"
 
+# unfortunately, most nvim plugins require nodejs + npm :| 
+pkg_install --no-install-recommends nodejs npm
+
 # Install GoBuster
 GOBUSTER_URL="https://github.com/OJ/gobuster/releases/download/{VERSION}/gobuster_Linux_x86_64.tar.gz"
 GOBUSTER_ARCHIVE=/tmp/gobuster.tar.gz
