@@ -6,9 +6,12 @@
 function _install_home_config() {
 	set -e
 	# install labvm-dotfiles:
-	"$ISC_SRC/files/labvm-dotfiles/install.sh"
+	COMPONENTS=()
+	if [[ "$USER" == "root" ]]; then COMPONENTS+=(-nvim); fi
+	"$ISC_SRC/files/labvm-dotfiles/install.sh" "${COMPONENTS[@]}"
 
-	# pwndbg!
+	# pwndbg (only for 'student' user)
+	if [[ "$USER" != "student" ]]; then return 0; fi
 	[[ -d "$HOME/.pwndbg" ]] || git clone https://github.com/pwndbg/pwndbg "$HOME/.pwndbg"
 	(
 		cd "$HOME/.pwndbg";
@@ -19,6 +22,7 @@ function _install_home_config() {
 		# upgrade pip itself
 		${PYTHON} -m pip install --upgrade pip uv
 		${PWNDBG_VENV_PATH}/bin/uv sync --extra gdb --quiet
+		${PWNDBG_VENV_PATH}/bin/uv cache clean
 		echo "source $PWD/gdbinit.py" > "$HOME/.gdbinit"
 	)
 }
