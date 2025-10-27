@@ -9,8 +9,6 @@ include $(FRAMEWORK_DIR)/lib/inc_all.mk
 DEFAULT_GOAL = labvm
 INIT_GOAL = labvm
 SUDO ?= sudo
-# Debian uses 1 partition only
-ZEROFREE_PART_NUM = 1
 
 # Fresh Debian base VM
 $(call vm_new_base_debian,base)

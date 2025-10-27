@@ -19,16 +19,32 @@ pkg_install --no-install-recommends ltrace exiftool binwalk sqlmap nikto john \
 pkg_install --no-install-recommends \
 	python3 python3-venv python3-pip python3-setuptools libssl-dev libffi-dev
 
+# Github packages' architecture
+GH_ARCH=x86_64
+
 # Add i386 libraries (required for pwndbg)
 if uname -m | grep x86_64 >/dev/null; then
 	dpkg --add-architecture i386
+	GH_ARCH=x86_64
 	apt-get update
 	apt-get install -y libc6-dbg:i386 libgcc-s1:i386
+fi
+# add qemu-user + C libraries for aarch64
+if uname -m | grep aarch64 >/dev/null; then
+	GH_ARCH=arm64
+	pkg_install --no-install-recommends qemu-user qemu-user-binfmt
+	# install cross compiler (+ gdb in recommends)
+	pkg_install gcc-x86-64-linux-gnu gcc-i686-linux-gnu
+	dpkg --add-architecture i386
+	dpkg --add-architecture amd64
+	# to run x86 executables, we also need some userspace libraries...
+	apt-get update
+	apt-get install -y libc6:i386 libc6:amd64 libc6-dbg:i386 libgcc-s1:i386
 fi
 
 # Install a newer neovim (from github releases)
 NEOVIM_DEST="/opt/nvim"
-NEOVIM_URL="https://github.com/neovim/neovim/releases/download/{VERSION}/nvim-linux-x86_64.tar.gz"
+NEOVIM_URL="https://github.com/neovim/neovim/releases/download/{VERSION}/nvim-linux-$GH_ARCH.tar.gz"
 NEOVIM_ARCHIVE=/tmp/nvim-linux.tar.gz
 fetch.sh --download=/tmp/nvim-linux.tar.gz "$NEOVIM_URL"
 rm -rf "$NEOVIM_DEST" && mkdir -p "$NEOVIM_DEST"
@@ -39,7 +55,7 @@ ln -sf "$NEOVIM_DEST/bin/nvim" "/usr/local/bin/nvim"
 pkg_install --no-install-recommends nodejs npm
 
 # Install GoBuster
-GOBUSTER_URL="https://github.com/OJ/gobuster/releases/download/{VERSION}/gobuster_Linux_x86_64.tar.gz"
+GOBUSTER_URL="https://github.com/OJ/gobuster/releases/download/{VERSION}/gobuster_Linux_$GH_ARCH.tar.gz"
 GOBUSTER_ARCHIVE=/tmp/gobuster.tar.gz
 fetch.sh --download="$GOBUSTER_ARCHIVE" "$GOBUSTER_URL"
 mkdir /tmp/gobuster/
