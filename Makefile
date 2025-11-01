@@ -14,7 +14,7 @@ SUDO ?= sudo
 $(call vm_new_base_debian,base)
 base-ver = 13
 
-labvm-ver = $(ISC_LABVM_VERSION)
+labvm-ver = $(ISC_LABVM_VERSION)$(ARCH_SUFFIX)
 labvm-prefix = ISC_$(labvm-ver)
 
 # VM with ISC lab customizations
