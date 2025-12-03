@@ -9,15 +9,18 @@ SYSTEMD_PRESET_FILE=/etc/systemd/system-preset/90-default-servers.preset
 mkdir -p /etc/systemd/system-preset/
 
 # network services: telnetd, vsftpd
-apt-get install --no-install-recommends -y telnetd vsftpd
+pkg_install --no-install-recommends -y telnetd vsftpd
 
 # apache2
-apt-get install --no-install-recommends -y apache2 libapache2-mod-php
+pkg_install --no-install-recommends -y apache2 libapache2-mod-php
+
+# VPN tools
+pkg_install openvpn wireguard-tools
 
 # postfix, courier
 echo "postfix postfix/mailname string host" | debconf-set-selections
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
-apt-get install --no-install-recommends -y postfix courier-imap
+pkg_install --no-install-recommends -y postfix courier-imap
 # configure mail
 postconf -e 'home_mailbox= Maildir/'
 postconf -e 'smtp_host_lookup = native,dns'
