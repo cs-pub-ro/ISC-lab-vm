@@ -4,6 +4,7 @@
 # add "hacker" (our guest) account
 sh_create_user hacker 1337
 usermod -e -1 hacker
+usermod -aG tty hacker
 echo "hacker:student31337" | chpasswd
 
 # install labvm-dotfiles for 'hacker' user, too
