@@ -13,7 +13,7 @@ pkg_install --no-install-recommends tmux vim-nox nano bash-completion less \
 
 # security utils
 pkg_install --no-install-recommends ltrace exiftool binwalk sqlmap nikto john \
-	netcat-openbsd testdisk foremost
+	netcat-openbsd testdisk foremost xxd
 
 # python / dev libraries
 pkg_install --no-install-recommends \
