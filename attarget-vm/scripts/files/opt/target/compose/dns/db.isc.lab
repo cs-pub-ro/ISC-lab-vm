@@ -9,4 +9,5 @@ $TTL 300
 @	IN	NS	ns.isc.lab.
 @	IN	A	10.9.9.9
 ns	IN	A	10.9.9.9
+knock	IN	TXT	"11731 24472 39913"
 flag	IN	TXT	"ISC{f4_z0n3_tr4nsf3r}"

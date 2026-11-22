@@ -40,6 +40,33 @@ check "F3 flag in sysLocation" \
 check "F4 flag in the isc.lab zone transfer" \
 	sh -c "dig +short @$T isc.lab AXFR | grep -q 'ISC{'"
 
+# --- F5: port knocking
+knock_seq() {
+	if command -v knock >/dev/null 2>&1; then
+		knock "$T" 11731 24472 39913
+	else
+		for port in 11731 24472 39913; do
+			timeout 1 bash -c "echo >/dev/tcp/$T/$port" 2>/dev/null || true
+		done
+	fi
+}
+knock_then_fetch() {
+	knock_seq
+	sleep 1
+	curl -fsS "http://$T:9999/" | grep -q 'ISC{'
+}
+check "9999 is filtered before the knock" \
+	sh -c "nmap -Pn -p 9999 $T | grep -q 'filtered'"
+
+# The knock only works from a remote source: a machine knocking its own address
+# sends the packets over loopback, where knockd is not listening.
+if [[ "$T" != "127.0.0.1" && "$T" != "localhost" ]] && \
+		! ip -4 -br addr show 2>/dev/null | grep -qw "$T"; then
+	check "F5 flag after the knock sequence" knock_then_fetch
+else
+	echo "SKIP F5 flag after the knock sequence (run from another machine)"
+fi
+
 echo
 if (( fails )); then
 	echo "$fails test(s) FAILED"

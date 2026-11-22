@@ -1,0 +1,13 @@
+[Unit]
+Description=ISC Lab 08 attack target firewall
+# after docker so its iptables setup cannot undo our rules
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/target/host/firewall.sh
+
+[Install]
+WantedBy=multi-user.target

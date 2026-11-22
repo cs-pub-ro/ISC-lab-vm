@@ -16,9 +16,14 @@ Provisioned by the `attarget-vm` layer of the ISC lab VM repository.
                      the Server banner is the version f2 (`nmap -sV`)
     53/tcp+udp dns   zone isc.lab, open AXFR; the flag TXT holds f4
     161/udp   snmp   public read-only community; sysLocation holds f3
+    9999/tcp  knock  maintenance console, only after the knock (f5)
 
 Flags are plain literals in the file that serves them (the page, `app.py`, or
 `snmpd.conf`) — no templating, no rotation.
+
+The host firewall (host/firewall.sh, target-firewall.service) drops
+everything but the published ports and limits egress to the lab VLAN,
+the metadata service and DHCP.
 
 ## Testing
 
