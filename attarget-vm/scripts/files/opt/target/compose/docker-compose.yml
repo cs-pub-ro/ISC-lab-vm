@@ -1,0 +1,35 @@
+# Lab 08 attack target — service stack
+#
+# Every service uses `network_mode: host` on purpose: a student's nmap sees the
+# real host ports, iptables rules apply to INPUT, and any container can reach
+# another one's 127.0.0.1 (the pivoting task). Images are built at VM build time
+# (`docker compose build` in 55-target-services.sh); nothing is pulled at runtime.
+#
+# All containers run as root but with all capabilities dropped except
+# NET_BIND_SERVICE (needed to bind the low ports), and only mount the flags
+# directory read-only — a container escape gets you nothing on the host.
+
+name: isc-attack-target
+
+services:
+  # port 80/tcp — "device manager" dashboard, leaked version banner (F1, F2)
+  web:
+    build: ./web
+    image: isc/attarget-web
+    network_mode: host
+    restart: always
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    read_only: true
+    tmpfs: [/tmp]
+    volumes:
+      - ./web/www:/www:ro
+
+  # port 161/udp — sensor gateway, public read-only community (F3)
+  snmp:
+    build: ./snmp
+    image: isc/attarget-snmp
+    network_mode: host
+    restart: always
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]

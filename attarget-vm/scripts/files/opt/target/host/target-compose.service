@@ -1,0 +1,17 @@
+[Unit]
+Description=ISC Lab 08 attack target services (docker compose)
+# start only once docker is up: all containers use the host network namespace
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/target/compose
+ExecStart=/usr/bin/docker compose up -d --remove-orphans
+ExecStop=/usr/bin/docker compose down
+TimeoutStartSec=300
+
+[Install]
+WantedBy=multi-user.target

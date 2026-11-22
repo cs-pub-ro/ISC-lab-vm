@@ -18,9 +18,9 @@ Both derive from `labvm`, so build that first (`make labvm`).
 ## Layout
 
 ```
-scripts/prepare-attargetvm.d/      provisioning snippets (stage 2 only)
+scripts/prepare-attargetvm.d/    provisioning snippets (stage 2 only)
 scripts/files/opt/target/        payload, deployed to /opt/target on the VM
 ```
 
 Everything the services need (compose stack, firewall, knockd, beacon, watchdog,
-flag templates, acceptance tests) lives under `/opt/target`; see its `Readme.md`.
+acceptance tests) lives under `/opt/target`; see its `Readme.md`.

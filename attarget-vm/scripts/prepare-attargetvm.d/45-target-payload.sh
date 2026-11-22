@@ -4,6 +4,6 @@
 
 sh_log_info "Deploying target payload to /opt/target..."
 
-# runtime tree (services, host helpers, flag templates, watchdog's pristine copy)
-install -d -m0755 /opt/target/{compose,host,flags/flags.d,pristine,tests}
-rsync -rvh --chown=root:root "$ATTVM_SRC/files/opt/target/" /opt/target/
+# runtime tree (services, host helpers, watchdog's pristine copy)
+install -d -m0755 /opt/target/{compose,host,pristine,tests}
+rsync -avh --chown=root:root "$ATTVM_SRC/files/opt/target/" /opt/target/
