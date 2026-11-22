@@ -26,6 +26,19 @@ labvm-script-dirs = prepare-labvm.d:prepare-full.d
 labvm-deps = $(VM_FULL_FEATURED_SCRIPTS_DIR) $(abspath ./labvm/scripts)
 labvm-extra-rules += $(vm_zerofree_rule)
 
+# Attack target VM for Lab 08: deliberately vulnerable services, all in Docker
+# (host networking, iptables + knockd on the VM)
+$(call vm_new_layer_generic,attvm)
+attvm-ver = $(ISC_LABVM_VERSION)$(ARCH_SUFFIX)
+attvm-prefix = ISC_TARGET_$(attvm-ver)
+attvm-name = $(attvm-prefix)
+attvm-src-from = labvm
+attvm-copy-scripts = $(abspath $(FRAMEWORK_DIR)/scripts)/
+attvm-copy-scripts += $(abspath ./attarget-vm/scripts)/
+attvm-script-dirs = prepare-attargetvm.d
+attvm-deps = $(abspath ./attarget-vm/scripts)
+attvm-extra-rules += $(vm_zerofree_rule)
+
 # Export to VirtualBox & VMware
 localvm-name = $(labvm-prefix)_Local
 localvm-type = vm-combo
@@ -43,8 +56,18 @@ cloud-copy-scripts += $(abspath ./cloud/scripts)/
 cloud-extra-envs = "ISC_CLOUD_ADMIN_PASSWORD=$(ISC_CLOUD_ADMIN_PASSWORD)",
 cloud-extra-rules += $(vm_zerofree_rule)
 
+# Cloud-init variant of the attack target (for the OpenStack lab deployment)
+$(call vm_new_layer_cloud,attvm-cloud)
+attvm-cloud-name = $(attvm-prefix)_cloud
+attvm-cloud-src-from = attvm
+attvm-cloud-copy-scripts = $(abspath $(FRAMEWORK_DIR)/scripts)/
+attvm-cloud-copy-scripts += $(VM_CLOUD_SCRIPTS_DIR)
+attvm-cloud-copy-scripts += $(abspath ./cloud/scripts)/
+attvm-cloud-extra-envs = "ISC_CLOUD_ADMIN_PASSWORD=$(ISC_CLOUD_ADMIN_PASSWORD)",
+attvm-cloud-extra-rules += $(vm_zerofree_rule)
+
 # list with all VMs to generate rules for (note: use dependency ordering!)
-build-vms = base labvm localvm cloud
+build-vms = base labvm localvm cloud attvm attvm-cloud
 
 $(call vm_eval_all_rules)
 

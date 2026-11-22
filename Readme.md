@@ -33,6 +33,8 @@ order):
 - `localvm`: exports the `labvm` VM to VirtualBox/VMware (`.vmdk`/`.ovf`);
 - `cloud`: builds (from `labvm` VM) the cloud VM, cleaned up and ready
   for cloud usage (e.g., AWS, OpenStack).
+- `attvm`: builds the Lab 08 attack target VM (see [`attarget-vm/`](attarget-vm/)); 
+  `attvm-cloud` builds its cloud-init variant;
 - `labvm_edit`: easily edit an already build Lab VM (uses the previous
   image as backing snapshot);
 - `labvm_commit`: commits the edited VM back to its backing base;
