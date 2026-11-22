@@ -31,6 +31,10 @@ _rule INPUT -p udp --dport 53 -j ACCEPT
 _rule INPUT -p udp --dport 161 -j ACCEPT
 _rule INPUT -p udp --dport 68 -j ACCEPT            # DHCP replies
 
+# mDNS: avahi advertises <hostname>.local and answers the students' queries
+_rule INPUT -p udp --dport 5353 -j ACCEPT
+_rule OUTPUT -p udp --dport 5353 -j ACCEPT
+
 # knock sequence ports are *closed* (explicit RST), not filtered: a student
 # scanning them learns nothing, and knockd still sniffs the SYNs
 for port in 11731 24472 39913; do

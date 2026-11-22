@@ -11,6 +11,13 @@ if [[ "$(hostname)" != "$TARGET_HOSTNAME" ]]; then
 	sed -i "s/^127.0.1.1\s.*/127.0.1.1\t$TARGET_HOSTNAME/" /etc/hosts
 fi
 
+# advertise $TARGET_HOSTNAME.local on the lab VLAN: the lab VM image installs
+# avahi with address publishing turned off (36-lab08-tools.sh), so flip it back
+# and (re)start the daemon now that the host name is right
+sed -i 's|^publish-addresses=no$|publish-addresses=yes|' /etc/avahi/avahi-daemon.conf
+systemctl enable avahi-daemon
+systemctl restart avahi-daemon
+
 # labvm ships student-facing servers that would steal the target's ports
 # (apache2: 80, openbsd-inetd: 23) or that it simply doesn't need (vsftpd,
 # postfix, dhcp); the dns/snmp containers bind the host netns, so a local
