@@ -19,6 +19,7 @@ Provisioned by the `attarget-vm` layer of the ISC lab VM repository.
                       the Server banner is the version f2 (`nmap -sV`)
     161/udp   snmp    public read-only community; sysLocation holds f3
     8080/tcp  apache  Apache 2.4.49, CVE-2021-41773 traversal; /flag holds f9
+    9998/udp  beacon  status broadcast every 10s; the payload holds f8
     9999/tcp  knock   maintenance console, only after the knock (f5)
 
 Flags are plain literals in the file that serves them (the page, `app.py`, or

@@ -49,3 +49,6 @@ _rule OUTPUT -d "$LAB_SUBNET" -j ACCEPT
 _rule OUTPUT -d 169.254.0.0/16 -j ACCEPT           # cloud metadata
 _rule OUTPUT -p udp --dport 67 -j ACCEPT           # DHCP requests
 _rule OUTPUT -p icmp -j ACCEPT
+# the beacon is a broadcast: allow it explicitly too, so it also works
+# while the VM is on a development network instead of the lab VLAN
+_rule OUTPUT -p udp --dport 9998 -j ACCEPT

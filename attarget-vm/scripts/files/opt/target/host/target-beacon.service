@@ -1,0 +1,12 @@
+[Unit]
+Description=ISC Lab 08 attack target status beacon (udp/9998 broadcast)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/target/host/beacon.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

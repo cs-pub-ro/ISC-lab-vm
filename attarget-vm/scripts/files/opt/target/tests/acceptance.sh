@@ -110,6 +110,12 @@ check "finger lists the users" \
 check "F7 flag in operator's .plan" \
 	sh -c "finger operator@$T | grep -q 'ISC{'"
 
+# --- F8: passive sniffing of the udp/9998 beacon
+beacon_flag() {
+	timeout 25 tcpdump -ni any -c 1 -A 'udp port 9998' 2>/dev/null | grep -q 'ISC{'
+}
+check "F8 flag in the status beacon (sniffing udp/9998)" beacon_flag
+
 # --- F9: Apache 2.4.49 path traversal (CVE-2021-41773)
 check "8080 fingerprints as Apache 2.4.49" \
 	sh -c "nmap -sV -p 8080 $T | grep -q 'Apache httpd 2.4.49'"
