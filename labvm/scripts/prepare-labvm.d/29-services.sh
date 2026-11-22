@@ -8,6 +8,11 @@ sh_log_info "Installing & configuring services..."
 SYSTEMD_PRESET_FILE=/etc/systemd/system-preset/90-default-servers.preset
 mkdir -p /etc/systemd/system-preset/
 
+# configure mDNS (avahi-daemon), resolve-only
+pkg_install --no-install-recommends -y avahi-daemon libnss-mdns
+sed -i 's|^#\?publish-addresses=.*|publish-addresses=no|' /etc/avahi/avahi-daemon.conf
+systemctl enable --now avahi-daemon
+
 # network services: telnetd, vsftpd
 pkg_install --no-install-recommends -y telnetd vsftpd
 
