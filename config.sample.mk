@@ -2,7 +2,7 @@
 # also check out framework/config.default.mk for all variables.
 
 # Lab VM edition
-ISC_LABVM_VERSION = 2025
+ISC_LABVM_VERSION = 2026
 
 # Base .iso images dir
 BASE_ISO_DIR ?= $(HOME)/Downloads/iso
