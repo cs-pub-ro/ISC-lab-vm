@@ -31,6 +31,12 @@ _rule INPUT -p udp --dport 53 -j ACCEPT
 _rule INPUT -p udp --dport 161 -j ACCEPT
 _rule INPUT -p udp --dport 68 -j ACCEPT            # DHCP replies
 
+# knock sequence ports are *closed* (explicit RST), not filtered: a student
+# scanning them learns nothing, and knockd still sniffs the SYNs
+for port in 11731 24472 39913; do
+	_rule INPUT -p tcp --dport "$port" -j REJECT --reject-with tcp-reset
+done
+
 # knock-gated console: stays closed until the knock sequence is seen
 _rule INPUT -p tcp --dport 9999 -j DROP
 
