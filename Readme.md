@@ -12,8 +12,9 @@ Requirements:
 
 ## Preparation
 
-Download and save a [Ubuntu 22.04 Live Server
-install](http://cdimage.ubuntu.com/releases/22.04.1/release/) iso image.
+Download and save a [Debian 13 netinst
+install](https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/) iso image
+(or change `base-ver` in the Makefile to another distro version).
 
 Optionally, create `config.local.mk`, copy the variables from
 [`config.sample.mk`](https://github.com/cs-pub-ro/ISC-lab-vm/blob/master/config.sample.mk) and/or [`framework/config.default.mk`](https://github.com/cs-pub-ro/labvm-framework/blob/master/config.default.mk)
@@ -27,9 +28,10 @@ configured.
 The following Makefile goals are available (the build process is usually in this
 order):
 
-- `base`: builds a base Ubuntu 22.04 install (required for the VM image);
+- `base`: builds a base Debian 13 install (required for the VM image);
 - `labvm`: builds the Lab VM with all required scripts and config;
-- `cloudvm`: builds (from `labvm` VM) the cloud VM, cleaned up and ready
+- `localvm`: exports the `labvm` VM to VirtualBox/VMware (`.vmdk`/`.ovf`);
+- `cloud`: builds (from `labvm` VM) the cloud VM, cleaned up and ready
   for cloud usage (e.g., AWS, OpenStack).
 - `labvm_edit`: easily edit an already build Lab VM (uses the previous
   image as backing snapshot);
@@ -37,11 +39,10 @@ order):
 - `[*]_clean`: removes the generated image(s);
 - `ssh`: SSH-es into a running Packer VM;
 
-If packer complains about the output file existing, you must either manually
-delete the generated VM from inside `TMP_DIR`, or set the `DELETE=1` makefile
-variable (but be careful):
+If packer complains about the output file existing, use the `_clean` goal (or
+`FORCE=1` to wipe the destination before building):
 ```sh
-make DELETE=1 labvm
+make labvm_clean labvm
 ```
 
 If you want to keep the install scripts at the end of the provisioning phase,

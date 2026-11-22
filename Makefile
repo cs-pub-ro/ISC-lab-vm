@@ -21,8 +21,9 @@ labvm-prefix = ISC_$(labvm-ver)
 $(call vm_new_layer_full_featured,labvm)
 labvm-name = $(labvm-prefix)
 labvm-src-from = base
-labvm-script-prepare = isc-prepare.sh
 labvm-copy-scripts += $(abspath ./labvm/scripts)/
+labvm-script-dirs = prepare-labvm.d:prepare-full.d
+labvm-deps = $(VM_FULL_FEATURED_SCRIPTS_DIR) $(abspath ./labvm/scripts)
 labvm-extra-rules += $(vm_zerofree_rule)
 
 # Export to VirtualBox & VMware
@@ -36,6 +37,8 @@ localvm-extra-rules += $(vm_zerofree_rule)
 $(call vm_new_layer_cloud,cloud)
 cloud-name = $(labvm-prefix)_cloud
 cloud-src-from = labvm
+cloud-copy-scripts = $(abspath $(FRAMEWORK_DIR)/scripts)/
+cloud-copy-scripts += $(VM_CLOUD_SCRIPTS_DIR)
 cloud-copy-scripts += $(abspath ./cloud/scripts)/
 cloud-extra-envs = "ISC_CLOUD_ADMIN_PASSWORD=$(ISC_CLOUD_ADMIN_PASSWORD)",
 cloud-extra-rules += $(vm_zerofree_rule)
