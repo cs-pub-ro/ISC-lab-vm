@@ -12,12 +12,13 @@ Provisioned by the `attarget-vm` layer of the ISC lab VM repository.
 
 ## Current services
 
-    80/tcp    web    "ISC Sensor Gateway" dashboard; /backup/ holds f1,
-                     the Server banner is the version f2 (`nmap -sV`)
-    23/tcp    telnet old console, operator:operator; home flag f6
-    53/tcp+udp dns   zone isc.lab, open AXFR; the flag TXT holds f4
-    161/udp   snmp   public read-only community; sysLocation holds f3
-    9999/tcp  knock  maintenance console, only after the knock (f5)
+    23/tcp    telnet  old console, operator:operator; home flag f6
+    53/tcp+udp dns    zone isc.lab, open AXFR; the flag TXT holds f4
+    79/tcp    finger  user list + operator's .plan; the plan holds f7
+    80/tcp    web     "ISC Sensor Gateway" dashboard; /backup/ holds f1,
+                      the Server banner is the version f2 (`nmap -sV`)
+    161/udp   snmp    public read-only community; sysLocation holds f3
+    9999/tcp  knock   maintenance console, only after the knock (f5)
 
 Flags are plain literals in the file that serves them (the page, `app.py`, or
 `snmpd.conf`) — no templating, no rotation.

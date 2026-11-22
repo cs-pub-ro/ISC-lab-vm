@@ -64,3 +64,13 @@ services:
     # operator user (same privilege-drop pattern as bind9)
     cap_drop: [ALL]
     cap_add: [NET_BIND_SERVICE, SETUID, SETGID, CHOWN]
+  # port 79/tcp — finger: user enumeration + operator's .plan (F7)
+  finger:
+    build: ./finger
+    image: isc/attarget-finger
+    network_mode: host
+    restart: always
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    read_only: true
+    tmpfs: [/tmp]

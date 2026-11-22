@@ -104,6 +104,12 @@ PY
 }
 check "F6 flag over telnet (operator:operator)" telnet_flag
 
+# --- F7: finger user enumeration + .plan leak
+check "finger lists the users" \
+	sh -c "finger @$T | grep -q operator"
+check "F7 flag in operator's .plan" \
+	sh -c "finger operator@$T | grep -q 'ISC{'"
+
 echo
 if (( fails )); then
 	echo "$fails test(s) FAILED"
