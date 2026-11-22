@@ -33,3 +33,13 @@ services:
     restart: always
     cap_drop: [ALL]
     cap_add: [NET_BIND_SERVICE]
+
+  # port 53/tcp+udp — sensor inventory zone, open AXFR (F4)
+  dns:
+    build: ./dns
+    image: isc/attarget-dns
+    network_mode: host
+    restart: always
+    # named binds 53 as root, then drops to the `bind` user (SETUID/SETGID)
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE, SETUID, SETGID]

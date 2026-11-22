@@ -14,6 +14,7 @@ Provisioned by the `attarget-vm` layer of the ISC lab VM repository.
 
     80/tcp    web    "ISC Sensor Gateway" dashboard; /backup/ holds f1,
                      the Server banner is the version f2 (`nmap -sV`)
+    53/tcp+udp dns   zone isc.lab, open AXFR; the flag TXT holds f4
     161/udp   snmp   public read-only community; sysLocation holds f3
 
 Flags are plain literals in the file that serves them (the page, `app.py`, or

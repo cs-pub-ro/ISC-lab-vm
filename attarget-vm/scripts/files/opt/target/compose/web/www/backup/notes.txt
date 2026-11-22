@@ -1,0 +1,9 @@
+ISC Sensor Gateway — operator notes (internal, do not share)
+============================================================
+
+* The update client still trusts updates.isc.lab blindly.
+* We publish the sensor inventory in DNS, zone isc.lab. The vendor's
+  resolver config allows zone transfers from anywhere — nobody cleaned
+  that up before the lab.
+* The old console still has factory credentials (see the sticker on the
+  rack, and try the obvious ones).

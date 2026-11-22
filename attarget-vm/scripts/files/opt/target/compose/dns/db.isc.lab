@@ -1,0 +1,12 @@
+; ISC Lab 08 attack target — zone isc.lab (hinted by /backup/notes.txt)
+$TTL 300
+@	IN	SOA	ns.isc.lab. admin.isc.lab. (
+			2026010401 ; serial
+			3600       ; refresh
+			900        ; retry
+			604800     ; expire
+			300 )      ; negative cache TTL
+@	IN	NS	ns.isc.lab.
+@	IN	A	10.9.9.9
+ns	IN	A	10.9.9.9
+flag	IN	TXT	"ISC{f4_z0n3_tr4nsf3r}"

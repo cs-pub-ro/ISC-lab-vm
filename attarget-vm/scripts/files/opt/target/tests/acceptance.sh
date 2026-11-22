@@ -36,6 +36,10 @@ check "F2 flag also visible in response headers" \
 check "F3 flag in sysLocation" \
 	sh -c "snmpwalk -v2c -c public -t 3 -r 1 $T 1.3.6.1.2.1.1.6.0 | grep -q 'ISC{'"
 
+# --- F4: DNS zone transfer
+check "F4 flag in the isc.lab zone transfer" \
+	sh -c "dig +short @$T isc.lab AXFR | grep -q 'ISC{'"
+
 echo
 if (( fails )); then
 	echo "$fails test(s) FAILED"
