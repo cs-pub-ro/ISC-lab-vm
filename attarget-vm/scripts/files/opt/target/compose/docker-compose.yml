@@ -74,3 +74,13 @@ services:
     cap_add: [NET_BIND_SERVICE]
     read_only: true
     tmpfs: [/tmp]
+  # port 8080/tcp — Apache 2.4.49, CVE-2021-41773 path traversal (F9)
+  cve-apache:
+    build: ./cve-apache
+    image: isc/attarget-cve-apache
+    network_mode: host
+    restart: always
+    # the master runs as root and spawns the workers as `daemon` (8080 itself
+    # is unprivileged, so NET_BIND_SERVICE is not needed)
+    cap_drop: [ALL]
+    cap_add: [SETUID, SETGID, CHOWN]

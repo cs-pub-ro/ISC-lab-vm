@@ -24,7 +24,7 @@ _rule INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 _rule INPUT -p icmp --icmp-type echo-request -j ACCEPT
 
 # public services — add a port here when its service lands
-for port in 22 23 53 79 80; do
+for port in 22 23 53 79 80 8080; do
 	_rule INPUT -p tcp --dport "$port" -j ACCEPT
 done
 _rule INPUT -p udp --dport 53 -j ACCEPT
