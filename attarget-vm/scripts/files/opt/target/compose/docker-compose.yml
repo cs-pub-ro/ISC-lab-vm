@@ -60,6 +60,11 @@ services:
     image: isc/attarget-telnet
     network_mode: host
     restart: always
+    volumes:
+      - type: bind
+        source: ./telnet/flag
+        target: /home/operator/.flag
+        read_only: true
     # telnetd binds :23 as root; login then chowns the pty and switches to the
     # operator user (same privilege-drop pattern as bind9)
     cap_drop: [ALL]
